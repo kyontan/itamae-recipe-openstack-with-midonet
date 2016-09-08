@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -x
+
+./itamae-runner-inside $@ | xargs -o -I{} sh -c "{}"

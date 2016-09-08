@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require "json"
+
+json_state = JSON::State.new(indent: "  ", object_nl: ?\n)
+
+template_dir    = $1 || "nodes_template"
+destination_dir = $2 || "nodes"
+
+base_template_file = "node-all.json"
+base_template_file_path = template_dir + "/" + base_template_file
+
+base_template = JSON.parse(File.read(base_template_file_path))
+
+if not Dir.exists? destination_dir
+  Dir.mkdir(destination_dir)
+end
+
+template_files = Dir.glob(template_dir + "/*.json") - [base_template_file_path]
+
+template_files.each do |path|
+  template = base_template.merge(JSON.parse(File.read(path)))
+  
+  destination_path = path.sub(template_dir, destination_dir)
+  File.write(destination_path, template.to_json(json_state))
+end
