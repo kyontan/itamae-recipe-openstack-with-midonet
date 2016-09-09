@@ -21,6 +21,7 @@ if you want to provision specified host:
 ## Scripts (sorted for running)
 
 1. update-yum.rb
+1. update-hosts.rb
 1. set-selinux-permissive.rb
 1. install-chrony.rb
 1. install-openstack-packages.rb
