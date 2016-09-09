@@ -56,12 +56,12 @@ file "/etc/glance/glance-api.conf" do
 			keystone_authtoken_section.sub!(/^#?#{key} =.+\n/, "")
 		end
 
-		keystone_authtoken_section += "auth_url = http://#{node[:controller_node_ip]}:35357\n"
-		keystone_authtoken_section += "project_domain_name = default\n"
-		keystone_authtoken_section += "user_domain_name = default\n"
-		keystone_authtoken_section += "project_name = service\n"
-		keystone_authtoken_section += "username = glance\n"
-		keystone_authtoken_section += "password = node[:glance_admin_password]\n"
+		keystone_authtoken_section << "auth_url = http://#{node[:controller_node_ip]}:35357\n"
+		keystone_authtoken_section << "project_domain_name = default\n"
+		keystone_authtoken_section << "user_domain_name = default\n"
+		keystone_authtoken_section << "project_name = service\n"
+		keystone_authtoken_section << "username = glance\n"
+		keystone_authtoken_section << "password = node[:glance_admin_password]\n"
 
 		content.sub!(regexp, keystone_authtoken_section)
 
@@ -98,11 +98,11 @@ file "/etc/glance/glance-registry.conf" do
 			keystone_authtoken_section.sub!(/^#?#{key} =.+\n/, "")
 		end
 
-		keystone_authtoken_section += "project_domain_name = default\n"
-		keystone_authtoken_section += "user_domain_name = default\n"
-		keystone_authtoken_section += "project_name = service\n"
-		keystone_authtoken_section += "username = glance\n"
-		keystone_authtoken_section += "password = #{node[:glance_admin_password]}\n"
+		keystone_authtoken_section << "project_domain_name = default\n"
+		keystone_authtoken_section << "user_domain_name = default\n"
+		keystone_authtoken_section << "project_name = service\n"
+		keystone_authtoken_section << "username = glance\n"
+		keystone_authtoken_section << "password = #{node[:glance_admin_password]}\n"
 
 		content.sub!(regexp, keystone_authtoken_section)
 	end

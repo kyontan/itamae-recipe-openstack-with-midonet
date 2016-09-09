@@ -22,13 +22,13 @@ file "/etc/nova/nova.conf" do
 			keystone_authtoken_section.sub!(/^#?#{key} =.+\n/, "")
 		end
 
-		keystone_authtoken_section += "auth_type = password\n"
-		keystone_authtoken_section += "auth_url = http://#{node[:controller_node_ip]}:35357\n"
-		keystone_authtoken_section += "project_domain_name = default\n"
-		keystone_authtoken_section += "user_domain_name = default\n"
-		keystone_authtoken_section += "project_name = service\n"
-		keystone_authtoken_section += "username = nova\n"
-		keystone_authtoken_section += "password = #{node[:nova_admin_password]}\n"
+		keystone_authtoken_section << "auth_type = password\n"
+		keystone_authtoken_section << "auth_url = http://#{node[:controller_node_ip]}:35357\n"
+		keystone_authtoken_section << "project_domain_name = default\n"
+		keystone_authtoken_section << "user_domain_name = default\n"
+		keystone_authtoken_section << "project_name = service\n"
+		keystone_authtoken_section << "username = nova\n"
+		keystone_authtoken_section << "password = #{node[:nova_admin_password]}\n"
 
 		content.sub!(regexp, keystone_authtoken_section)
 
@@ -51,7 +51,7 @@ file "/etc/nova/nova.conf" do
 			vnc_section.sub!(/^#?#{key} =.+\n/, "")
 		end
 
-		vnc_section += "enabled = True\n"
+		vnc_section << "enabled = True\n"
 
 		content.sub!(regexp, vnc_section)
 
