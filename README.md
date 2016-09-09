@@ -20,8 +20,8 @@ if you want to provision specified host:
 
 ## Scripts (sorted for running)
 
-1. update-yum.rb
 1. update-hosts.rb
+1. setup-midonet-repositories.rb
 1. set-selinux-permissive.rb
 1. install-chrony.rb
 1. install-openstack-packages.rb
@@ -29,8 +29,12 @@ if you want to provision specified host:
 1. install-mongodb.rb
 1. install-rabbitmq.rb
 1. install-memcached.rb
-1. install-keystone.rb
+1. install-openstack-keystone.rb
 1. setup-accounts.rb
 1. setup-midonet-to-keystone.rb
-1. install-grance.rb
-1. install-nova-controller.rb
+1. install-openstack-glance.rb
+1. install-openstack-nova-controller.rb
+1. install-openstack-nova-compute.rb
+1. setup-midonet-to-nova.rb
+1. install-openstack-neutron-with-midonet-controller.rb
+1. install-openstack-neutron-with-midonet-compute.rb
