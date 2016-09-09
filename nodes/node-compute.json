@@ -1,7 +1,0 @@
-{
-  "controller_node_ip":"172.17.125.161",
-  "compute_node_1_ip":"172.17.125.162",
-  "ntp_server":"172.17.125.161",
-  "management_network_ip":"172.17.125.0/24",
-  "gateway_ip":"172.17.125.254"
-}

@@ -29,3 +29,7 @@ if you want to provision specified host:
 1. install-rabbitmq.rb
 1. install-memcached.rb
 1. install-keystone.rb
+1. setup-accounts.rb
+1. setup-midonet-to-keystone.rb
+1. install-grance.rb
+1. install-nova-controller.rb

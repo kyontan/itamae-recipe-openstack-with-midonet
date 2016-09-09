@@ -3,17 +3,15 @@ execute "create keystone database" do
 		CREATE DATABASE keystone;\" || :"
 end
 
-execute "edit permission of keystone user (1)" do
+execute "modify permission of user `keystone` (1)" do
 	command "mysql -uroot -p#{node[:db_root_password]} -e \" \
-		GRANT ALL PRIVILEGES ON keystone.* \
-		TO 'keystone'@'localhost' \
+		GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' \
 		IDENTIFIED BY '#{node[:keystone_db_password]}';\""
 end
 
-execute "edit permission of keystone user (2)" do
+execute "modify permission of user `keystone` (2)" do
 	command "mysql -uroot -p#{node[:db_root_password]} -e \" \
-		GRANT ALL PRIVILEGES ON keystone.* \
-		TO 'keystone'@'%' \
+		GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' \
 		IDENTIFIED BY '#{node[:keystone_db_password]}';\""
 end
 
@@ -34,7 +32,7 @@ directory "/etc/keystone" do
 	mode "0755"
 end
 
-execute "Workaround for scp permission denied" do
+execute "Workaround for `scp permission denied`" do
 	command "chmod 666 /etc/keystone/keystone.conf"
 end
 
@@ -75,6 +73,10 @@ execute "keystone-setup.sh" do
 	command "/tmp/keystone-setup.sh"
 end
 
+file "/tmp/keystone-setup.sh" do
+	action :delete
+end
+
 # execute "Sync keystone-manage db" do
 # 	user "keystone"
 # 	command "keystone-manage db_sync"
@@ -93,4 +95,27 @@ end
 
 service "httpd.service" do
 	action [:enable, :restart]
+end
+
+env = "OS_TOKEN=#{node[:keystone_admin_token]} OS_URL=http://#{node[:controller_node_ip]}:35357/v3 OS_IDENTITY_API_VERSION=3"
+
+# Create service (identity type only)
+node[:services].select{|x| x[:type] == "identity" }.each do |service|
+	execute "Create the #{service[:name]} service as #{service[:type]} service" do
+		command "#{env} openstack service create --name #{service[:name]} --description \"#{service[:description]}\" #{service[:type]}"
+		not_if "#{env} openstack service list | grep #{service[:name]}"
+	end
+end
+
+interfaces = {
+	public: 5000,
+	internal: 5000,
+	admin: 35357
+}
+
+interfaces.each do |interface, port|
+	execute "Create Identity service API Endpoint (#{interface})" do
+		command "#{env} openstack endpoint create --region #{node[:region_name]} identity #{interface} http://#{node[:controller_node_ip]}:#{port}/v3"
+		not_if "#{env} openstack endpoint list | grep keystone | grep #{interface}"
+	end
 end
