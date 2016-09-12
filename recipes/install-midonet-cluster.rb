@@ -2,8 +2,6 @@ package "midonet-cluster" do
 	action :install
 end
 
-require "yaml"
-
 file "/etc/midonet/midonet.conf" do
 	action :edit
 	# group "root"
@@ -16,8 +14,9 @@ file "/etc/midonet/midonet.conf" do
 end
 
 execute "Configure access to the NSDB (zookeeper)" do
-	nsdb_binds = node[:nsdb_ips].map{|x| "#{x}:2181"}.join(?,)
+	user "root"
 
+	nsdb_binds = node[:nsdb_ips].map{|x| "#{x}:2181"}.join(?,)
 	command "cat <<EOF | mn-conf set -t default
 zookeeper {
     zookeeper_hosts = \"#{nsdb_binds}\"
@@ -28,8 +27,9 @@ EOF
 end
 
 execute "Configure access to the NSDB (cassandra)" do
-	nsdb_binds = node[:nsdb_ips].map{|x| "#{x}:2181"}.join(?,)
+	user "root"
 
+	nsdb_binds = node[:nsdb_ips].map{|x| "#{x}:2181"}.join(?,)
 	command "cat <<EOF | mn-conf set -t default
 cassandra {
     servers = \"#{node[:nsdb_ips].join(?,)}\"
@@ -40,14 +40,16 @@ EOF
 end
 
 execute "Configure Keystone access" do
-	admin_pass = node[:users].find{|x| x[:name] == "admin" }[:password]
+	user "root"
 
 	command "cat <<EOF | mn-conf set -t default
 cluster.auth {
     provider_class = \"org.midonet.cluster.auth.keystone.KeystoneService\"
     admin_role = \"admin\"
+    keystone.domain_id = \"\"
+    keystone.domain_name = \"default\"
     keystone.tenant_name = \"admin\"
-    keystone.admin_token = \"#{admin_pass}\"
+    keystone.admin_token = \"#{node[:keystone_admin_token]}\"
     keystone.host = #{node[:controller_node_ip]}
     keystone.port = 35357
 }
