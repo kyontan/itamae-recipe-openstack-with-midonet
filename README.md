@@ -41,3 +41,7 @@ if you want to provision specified host:
 1. install-openstack-horizon.rb
 1. install-midonet-fwaas-controller.rb
 1. install-midonet-lbaas-controller.rb
+1. install-midonet-nsdb-zookeeper.rb
+1. install-midonet-nsdb-cassandra.rb
+1. install-midonet-cluster.rb
+1. install-midonet-cli.rb
