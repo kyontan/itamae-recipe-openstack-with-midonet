@@ -96,16 +96,16 @@ file "/etc/neutron/neutron.conf" do
 
 		regexp = /^\[keystone_authtoken\](?:.+?\n)(?=\[.+?\])/m
 		section = content.scan(regexp)[0]
-		%w(auth_uri auth_url memcached_servers auth_plugin project_domain_id user_domain_id project_name username password).each do |key|
+		%w(auth_uri auth_url memcached_servers auth_type project_domain_name user_domain_name project_name username password).each do |key|
 			section.sub!(/^#?#{key} =.+\n/, "")
 		end
 
 		section << "auth_uri = http://#{node[:controller_node_ip]}:5000\n"
 		section << "auth_url = http://#{node[:controller_node_ip]}:35357\n"
 		section << "memcached_servers = #{node[:controller_node_ip]}:11211\n"
-		section << "auth_plugin = password\n"
-		section << "project_domain_id = default\n"
-		section << "user_domain_id = default\n"
+		section << "auth_type = password\n"
+		section << "project_domain_name = default\n"
+		section << "user_domain_name = default\n"
 		section << "project_name = service\n"
 		section << "username = neutron\n"
 		section << "password = #{node[:neutron_admin_password]}\n"
@@ -116,14 +116,14 @@ file "/etc/neutron/neutron.conf" do
 
 		regexp = /^\[nova\](?:.+?\n)(?=\[.+?\])/m
 		section = content.scan(regexp)[0]
-		%w(auth_url auth_plugin project_domain_id user_domain_id region_name project_name username password).each do |key|
+		%w(auth_url auth_type project_domain_name user_domain_name region_name project_name username password).each do |key|
 			section.sub!(/^#?#{key} =.+\n/, "")
 		end
 
 		section << "auth_url = http://#{node[:controller_node_ip]}:35357\n"
-		section << "auth_plugin = password\n"
-		section << "project_domain_id = default\n"
-		section << "user_domain_id = default\n"
+		section << "auth_type = password\n"
+		section << "project_domain_name = default\n"
+		section << "user_domain_name = default\n"
 		section << "region_name = #{node[:region_name]}\n"
 		section << "project_name = service\n"
 		section << "username = nova\n"
@@ -156,7 +156,8 @@ end
 template "/etc/neutron/plugins/midonet/midonet.ini" do
 	action :create
 	source "../templates/midonet.ini.erb"
-	variables(controller_node_ip: node[:controller_node_ip], midonet_password: node[:midonet_password])
+	midonet_pass = node[:users].find{|x| x[:name] == "midonet" }[:password]
+	variables(controller_node_ip: node[:controller_node_ip], midonet_password: midonet_pass)
 
 	owner "root"
 	group "root"
@@ -195,7 +196,7 @@ file "/etc/nova/nova.conf" do
 		neutron_section << "password = #{node[:neutron_admin_password]}\n"
 
 		neutron_section << "service_metadata_proxy = True\n"
-		neutron_section << "metadata_proxy_shared_secret = METADATA_SECRET\n"
+		neutron_section << "metadata_proxy_shared_secret = #{node[:neutron_metadata_proxy_shared_secret]}\n"
 
 		content.sub!(regexp, neutron_section)
 	end

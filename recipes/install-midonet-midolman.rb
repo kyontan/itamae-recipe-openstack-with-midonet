@@ -9,7 +9,7 @@ file "/etc/midolman/midolman.conf" do
 
 	block do |content|
 		nsdb_binds = node[:nsdb_ips].map{|x| "#{x}:2181"}.join(?,)
-		content.sub!(/^#?zookeeper_hosts ?=.*$/, "zookeeper_hosts = #{nsdb_binds}\n")
+		content.sub!(/^#?zookeeper_hosts ?=.*$/, "zookeeper_hosts = #{nsdb_binds}")
 	end
 end
 
