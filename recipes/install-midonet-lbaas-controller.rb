@@ -27,12 +27,12 @@ file "/etc/neutron/neutron.conf" do
 
 		# ---------
 
-		regexp = /^\[service_providers\](?:.+?\n)(?=\[.+?\])/m
+		regexp = /^\[service_providers\](?:.+?\n)(?=\Z|\[.+?\])/m
 		section = content.scan(regexp)[0]
 
-		conf = "service_provider = LOADBALANCER:Midonet:midonet.neutron.services.loadbalancer.driver.MidonetLoadbalancerDriver:default"
 		if section
-			section.sub!(/^#?service_provider =.+\n/, conf)
+			section.sub!(/^#?service_provider =.+\n/, "")
+			section << "service_provider = LOADBALANCER:Midonet:midonet.neutron.services.loadbalancer.driver.MidonetLoadbalancerDriver:default\n"
 			content.sub!(regexp, section)
 		else
 			content << "[service_providers]\n"
