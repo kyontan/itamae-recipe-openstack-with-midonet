@@ -71,10 +71,10 @@ file "/etc/nova/nova.conf" do
 	# user "nova"
 
 	block do |content|
-		content.sub!(/^\#?virt_type = .*$/, "virt_type = qemu")
+		content.sub!(/^\#?virt_type ?=.*$/, "virt_type = qemu")
 	end
 
-	only_if "egrep -c '(vmx|svm)' /proc/cpuinfo"
+	not_if "egrep -c '(vmx|svm)' /proc/cpuinfo"
 end
 
 execute "Fix permission of /etc/nova/nova.conf" do
