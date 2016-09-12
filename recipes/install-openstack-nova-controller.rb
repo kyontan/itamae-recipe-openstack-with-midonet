@@ -101,6 +101,8 @@ file "/etc/nova/nova.conf" do
 		content.sub!(/^\#?vncserver_proxyclient_address ?=.*$/, "vncserver_proxyclient_address = $my_ip")
 		content.sub!(/^\#?api_servers ?=.*$/, "api_servers = http://#{node[:controller_node_ip]}:9292")
 		content.sub!(/^\#?lock_path ?=.*$/, "lock_path = /var/lib/nova/tmp")
+
+		content.sub!(/^\#?metadata_proxy_shared_secret ?=.*$/, "metadata_proxy_shared_secret = #{node[:neutron_metadata_proxy_shared_secret]}")
 	end
 end
 
