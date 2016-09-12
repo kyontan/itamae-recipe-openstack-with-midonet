@@ -87,9 +87,20 @@ end
 # 	command "keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone"
 # end
 
+file "/etc/httpd/conf/httpd.conf" do
+	action :edit
+	# group "root"
+	# user "root"
+
+	block do |content|
+		content.gsub!(/^\#?ServerName .*$/, "ServerName #{node[:controller_node_ip]}")
+	end
+end
+
 remote_file "/etc/httpd/conf.d/wsgi-keystone.conf" do
 	owner "root"
-	user "root"
+	group "root"
+	mode "0644"
 	source "../templates/wsgi-keystone.conf"
 end
 

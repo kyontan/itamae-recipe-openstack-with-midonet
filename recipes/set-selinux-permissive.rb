@@ -11,3 +11,10 @@ file "/etc/sysconfig/selinux" do
 	end
 end
 
+file "/etc/selinux/config" do
+	action :edit
+
+	block do |content|
+		content.gsub!("SELINUX=enforcing", "SELINUX=permissive")
+	end
+end

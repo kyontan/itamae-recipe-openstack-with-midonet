@@ -8,6 +8,8 @@ end
 
 file "/etc/mongod.conf" do
 	action :edit
+	owner "mongodb"
+	group "mongodb"
 
 	block do |content|
 		content.gsub!("bind_ip = 127.0.0.1", "bind_ip = #{node[:controller_node_ip]}")
