@@ -50,25 +50,39 @@ file "/etc/glance/glance-api.conf" do
 		content.sub!(/^\#?memcached_servers = .*$/, "memcached_servers = #{node[:controller_node_ip]}:11211")
 
 		regexp = /^\[keystone_authtoken\](?:.+?\n)(?=\[.+?\])/m
-		keystone_authtoken_section = content.scan(regexp)[0]
+		section = content.scan(regexp)[0]
 
-		%w(auth_url project_domain_name user_domain_name project_name username password).each do |key|
-			keystone_authtoken_section.sub!(/^#?#{key} =.+\n/, "")
+		%w(auth_url auth_type project_domain_name user_domain_name project_name username password).each do |key|
+			section.sub!(/^#?#{key} =.+\n/, "")
 		end
 
-		keystone_authtoken_section << "auth_url = http://#{node[:controller_node_ip]}:35357\n"
-		keystone_authtoken_section << "project_domain_name = default\n"
-		keystone_authtoken_section << "user_domain_name = default\n"
-		keystone_authtoken_section << "project_name = service\n"
-		keystone_authtoken_section << "username = glance\n"
-		keystone_authtoken_section << "password = node[:glance_admin_password]\n"
+		section << "auth_url = http://#{node[:controller_node_ip]}:35357\n"
+		section << "auth_type = password\n"
+		section << "project_domain_name = default\n"
+		section << "user_domain_name = default\n"
+		section << "project_name = service\n"
+		section << "username = glance\n"
+		section << "password = #{node[:glance_admin_password]}\n"
 
-		content.sub!(regexp, keystone_authtoken_section)
+		content.sub!(regexp, section)
+
+		# ---------
+
+		regexp = /^\[glance_store\](?:.+?\n)(?=\[.+?\])/m
+		section = content.scan(regexp)[0]
+
+		%w(stores default_store filesystem_store_datadir).each do |key|
+			section.sub!(/^#?#{key} =.+\n/, "")
+		end
+
+		section << "stores = file,http\n"
+		section << "default_store = file\n"
+		section << "filesystem_store_datadir = /var/lib/glance/images/\n"
+		content.sub!(regexp, section)
+
+		# ---------
 
 		content.sub!(/^\#?flavor = .*$/, "flavor = keystone")
-
-		content.sub!(/^\#?stores = .*$/, "stores = file,http")
-		content.sub!(/default_store = .*(?:\nfilesystem_store_datadir.*)?/, "default_store = file\nfilesystem_store_datadir = /var/lib/glance/images/")
 	end
 end
 
@@ -88,23 +102,29 @@ file "/etc/glance/glance-registry.conf" do
 	block do |content|
 		content.sub!(/^\#?connection = .*$/, "connection = mysql+pymysql://glance:#{node[:glance_db_password]}@#{node[:controller_node_ip]}/glance")
 
-		content.sub!(/^(?:\#?auth_uri = .*\n)+$/, [5000, 35357].map{|port| "auth_uri = http://#{node[:controller_node_ip]}:#{port}\n" }.join)
+		content.sub!(/^\#?auth_uri = .*$/, "auth_uri = http://#{node[:controller_node_ip]}:5000")
 		content.sub!(/^\#?memcached_servers = .*$/, "memcached_servers = #{node[:controller_node_ip]}:11211")
 
 		regexp = /^\[keystone_authtoken\](?:.+?\n)(?=\[.+?\])/m
-		keystone_authtoken_section = content.scan(regexp)[0]
+		section = content.scan(regexp)[0]
 
-		%w(project_domain_name user_domain_name project_name username password).each do |key|
-			keystone_authtoken_section.sub!(/^#?#{key} =.+\n/, "")
+		%w(auth_url auth_type project_domain_name user_domain_name project_name username password).each do |key|
+			section.sub!(/^#?#{key} =.+\n/, "")
 		end
 
-		keystone_authtoken_section << "project_domain_name = default\n"
-		keystone_authtoken_section << "user_domain_name = default\n"
-		keystone_authtoken_section << "project_name = service\n"
-		keystone_authtoken_section << "username = glance\n"
-		keystone_authtoken_section << "password = #{node[:glance_admin_password]}\n"
+		section << "auth_url = http://#{node[:controller_node_ip]}:35357\n"
+		section << "auth_type = password\n"
+		section << "project_domain_name = default\n"
+		section << "user_domain_name = default\n"
+		section << "project_name = service\n"
+		section << "username = glance\n"
+		section << "password = #{node[:glance_admin_password]}\n"
 
-		content.sub!(regexp, keystone_authtoken_section)
+		content.sub!(regexp, section)
+
+		# ---------
+
+		content.sub!(/^\#?flavor = .*$/, "flavor = keystone")
 	end
 end
 
@@ -128,6 +148,8 @@ file "/tmp/glance-setup.sh" do
 	action :delete
 end
 
-service "openstack-glance-api.service" do
-	action [:enable, :restart]
+%w(api registry).each do |x|
+	service "openstack-glance-#{x}.service" do
+		action [:enable, :restart]
+	end
 end
