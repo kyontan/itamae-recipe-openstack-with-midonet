@@ -38,3 +38,6 @@ if you want to provision specified host:
 1. setup-midonet-to-nova.rb
 1. install-openstack-neutron-with-midonet-controller.rb
 1. install-openstack-neutron-with-midonet-compute.rb
+1. install-openstack-horizon.rb
+1. install-midonet-fwaas-controller.rb
+1. install-midonet-lbaas-controller.rb
