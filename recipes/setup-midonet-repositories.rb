@@ -21,12 +21,12 @@
 # 	action :install
 # end
 
-# remote_file "/etc/yum.repos.d/datastax.repo" do
-# 	owner "root"
-# 	user "root"
-# 	mode "0644"
-# 	source "../templates/datastax.repo"
-# end
+remote_file "/etc/yum.repos.d/datastax.repo" do
+	owner "root"
+	user "root"
+	mode "0644"
+	source "../templates/datastax.repo"
+end
 
 remote_file "/etc/yum.repos.d/midonet.repo" do
 	owner "root"
