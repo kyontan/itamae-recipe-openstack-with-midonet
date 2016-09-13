@@ -23,7 +23,6 @@ zookeeper {
 }
 EOF
 "
-  not_if "mn-conf get zookeeper"
 end
 
 execute "Configure access to the NSDB (cassandra)" do
@@ -36,7 +35,6 @@ cassandra {
 }
 EOF
 "
-  not_if "mn-conf get cassandra"
 end
 
 execute "Configure Keystone access" do
@@ -55,7 +53,6 @@ cluster.auth {
 }
 EOF
 "
-  not_if "mn-conf get cluster.auth"
 end
 
 service "midonet-cluster.service" do
