@@ -24,17 +24,17 @@ execute "configure the JVM resource template" do
 end
 
 execute "configure MidoNet Metadata Proxy (agent.openstack.metadata.nova_metadata_url)" do
-  user "root"
+	user "root"
 	command "echo \"agent.openstack.metadata.nova_metadata_url : \\\"http://#{node[:controller_node_ip]}:8775\\\"\" | mn-conf set -t default"
 end
 
 execute "configure MidoNet Metadata Proxy (agent.openstack.metadata.shared_secret)" do
-  user "root"
+	user "root"
 	command "echo \"agent.openstack.metadata.shared_secret : #{node[:neutron_metadata_proxy_shared_secret]}\" | mn-conf set -t default"
 end
 
 execute "configure MidoNet Metadata Proxy (agent.openstack.metadata.enabled)" do
-  user "root"
+	user "root"
 	command "echo \"agent.openstack.metadata.enabled : true\" | mn-conf set -t default"
 end
 

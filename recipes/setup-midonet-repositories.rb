@@ -4,7 +4,7 @@
 
 # execute "Enable Red Hat base repository" do
 # 	user "root"
-#   command "subscription-manager repos --enable=rhel-7-server-rpms"
+# 	command "subscription-manager repos --enable=rhel-7-server-rpms"
 # end
 
 # execute "Enable additional Red Hat repositories (1)" do

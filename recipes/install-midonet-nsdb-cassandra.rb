@@ -22,5 +22,5 @@ execute "systemctl daemon-reload" do
 end
 
 service "cassandra.service" do
-  action [:enable, :restart]
+	action [:enable, :restart]
 end

@@ -56,5 +56,5 @@ EOF
 end
 
 service "midonet-cluster.service" do
-  action [:enable, :restart]
+	action [:enable, :restart]
 end

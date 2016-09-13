@@ -37,7 +37,7 @@ execute "Execute mysql-secure-install" do
 end
 
 file "/tmp/automate-mysql-secure-install.sh" do
-  action :delete
+	action :delete
 end
 
 service "mariadb.service" do

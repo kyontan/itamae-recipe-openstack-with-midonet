@@ -37,14 +37,14 @@ end
 directory "/usr/java/default/bin/" do
 	owner "root"
 	group "root"
-  action :create
+	action :create
 end
 
 link "/usr/java/default/bin/java" do
-  action :create
+	action :create
 	to "/usr/lib/jvm/jre-1.8.0-openjdk/bin/java"
 end
 
 service "zookeeper.service" do
-  action [:enable, :restart]
+	action [:enable, :restart]
 end
