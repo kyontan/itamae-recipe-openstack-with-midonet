@@ -23,6 +23,7 @@ if you want to provision specified host:
 1. update-hosts.rb
 1. setup-midonet-repositories.rb
 1. set-selinux-permissive.rb
+1. (disable-firewalld.rb)
 1. install-chrony.rb
 1. install-openstack-packages.rb
 1. install-mariadb.rb
