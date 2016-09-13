@@ -1,0 +1,10 @@
+recipes_relative_path = "../recipes"
+
+include_recipe "#{recipes_relative_path}/update-hosts"
+include_recipe "#{recipes_relative_path}/setup-midonet-repositories"
+include_recipe "#{recipes_relative_path}/set-selinux-permissive"
+include_recipe "#{recipes_relative_path}/install-openstack-packages"
+include_recipe "#{recipes_relative_path}/install-openstack-nova-compute"
+include_recipe "#{recipes_relative_path}/setup-midonet-to-nova"
+include_recipe "#{recipes_relative_path}/install-openstack-neutron-with-midonet-compute"
+include_recipe "#{recipes_relative_path}/install-midonet-midolman"
