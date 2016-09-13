@@ -47,18 +47,17 @@ file "/etc/nova/nova.conf" do
 		regexp = /^\[vnc\](?:.+?\n)(?=\[.+?\])/m
 		vnc_section = content.scan(regexp)[0]
 
-		%w(enabled).each do |key|
+		%w(enabled vncserver_listen vncserver_proxyclient_address novncproxy_base_url keymap).each do |key|
 			vnc_section.sub!(/^#?#{key} =.+\n/, "")
 		end
 
 		vnc_section << "enabled = True\n"
+		vnc_section << "vncserver_listen = 0.0.0.0\n"
+		vnc_section << "vncserver_proxyclient_address = $my_ip\n"
+		vnc_section << "novncproxy_base_url = http://#{node[:controller_node_ip]}:6080/vnc_auto.html\n"
+		vnc_section << "keymap = ja\n"
 
 		content.sub!(regexp, vnc_section)
-
-
-		content.sub!(/^\#?vncserver_listen ?=.*$/, "vncserver_listen = 0.0.0.0")
-		content.sub!(/^\#?vncserver_proxyclient_address ?=.*$/, "vncserver_proxyclient_address = $my_ip")
-		content.sub!(/^\#?novncproxy_base_url ?=.*$/, "novncproxy_base_url = http://#{node[:controller_node_ip]}:6080/vnc_auto.html")
 
 		content.sub!(/^\#?api_servers ?=.*$/, "api_servers = http://#{node[:controller_node_ip]}:9292")
 		content.sub!(/^\#?lock_path ?=.*$/, "lock_path = /var/lib/nova/tmp")

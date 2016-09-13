@@ -97,8 +97,20 @@ file "/etc/nova/nova.conf" do
 
 		content.sub!(/^\#?use_neutron ?=.*$/, "use_neutron = True")
 		content.sub!(/^\#?firewall_driver ?=.*$/, "firewall_driver = nova.virt.firewall.NoopFirewallDriver")
-		content.sub!(/^\#?vncserver_listen ?=.*$/, "vncserver_listen = $my_ip")
-		content.sub!(/^\#?vncserver_proxyclient_address ?=.*$/, "vncserver_proxyclient_address = $my_ip")
+
+		regexp = /^\[vnc\](?:.+?\n)(?=\[.+?\])/m
+		vnc_section = content.scan(regexp)[0]
+
+		%w(vncserver_listen vncserver_proxyclient_address keymap).each do |key|
+			vnc_section.sub!(/^#?#{key} =.+\n/, "")
+		end
+
+		vnc_section << "vncserver_listen = 0.0.0.0\n"
+		vnc_section << "vncserver_proxyclient_address = $my_ip\n"
+		vnc_section << "keymap = ja\n"
+
+		content.sub!(regexp, vnc_section)
+
 		content.sub!(/^\#?api_servers ?=.*$/, "api_servers = http://#{node[:controller_node_ip]}:9292")
 		content.sub!(/^\#?lock_path ?=.*$/, "lock_path = /var/lib/nova/tmp")
 	end
