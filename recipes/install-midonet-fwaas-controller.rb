@@ -17,10 +17,10 @@ file "/etc/neutron/neutron.conf" do
 		value = "midonet.neutron.services.firewall.plugin.MidonetFirewallPlugin"
 
 		if /^service_plugins ?=.*#{value}/ === section
-		elsif /^service_plugins ?=.+/ === section
-			section.sub!(/^service_plugins ?=.+/, "\\0,#{value}")
+		elsif /^service_plugins ?=.*/ === section
+			section.sub!(/^service_plugins ?=.*/, "\\0,#{value}")
 		else
-			section.sub!(/^#?service_plugins ?=.+/, "service_plugins = #{value}")
+			section.sub!(/^#?service_plugins ?=.*/, "service_plugins = #{value}")
 		end
 
 		content.sub!(regexp, section)

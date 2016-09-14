@@ -17,10 +17,10 @@ file "/etc/neutron/neutron.conf" do
 		value = "lbaas"
 
 		if /^service_plugins ?=.*#{value}/ === section
-		elsif /^service_plugins ?=.+/ === section
-			section.sub!(/^service_plugins ?=.+/, "\\0,#{value}")
+		elsif /^service_plugins ?=.*/ === section
+			section.sub!(/^service_plugins ?=.*/, "\\0,#{value}")
 		else
-			section.sub!(/^#?service_plugins ?=.+/, "service_plugins = #{value}")
+			section.sub!(/^#?service_plugins ?=.*/, "service_plugins = #{value}")
 		end
 
 		content.sub!(regexp, section)
@@ -31,7 +31,7 @@ file "/etc/neutron/neutron.conf" do
 		section = content.scan(regexp)[0]
 
 		if section
-			section.sub!(/^#?service_provider =.+\n/, "")
+			section.sub!(/^#?service_provider =.*\n/, "")
 			section << "service_provider = LOADBALANCER:Midonet:midonet.neutron.services.loadbalancer.driver.MidonetLoadbalancerDriver:default\n"
 			content.sub!(regexp, section)
 		else
