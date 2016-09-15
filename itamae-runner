@@ -13,14 +13,15 @@ cond=""
 
 case "x$1" in
 	"xall" )
-		shift
-		echo "Execute recipes on all hosts"
+    echo "Execute recipes on all hosts"
     ;;
   * )
     echo "Execute recipes on $1"
-		cond="if (\$1 == \"$1\") "
+    cond="if (\$1 == \"$1\") "
     ;;
 esac
+
+shift
 
 awk '/^[^#]/ { '"$cond"' print "ssh -h", $2, "-j", $3, "'"$itamae_opts $*"'" }' $hosts |
   tr '\n' '\0' |
