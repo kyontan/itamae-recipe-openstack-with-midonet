@@ -1,5 +1,28 @@
 #!/bin/sh
 
-set -x
+hosts=`dirname $0`/hosts
 
-./itamae-runner-inside $@ | xargs -o -I{} sh -c "{}"
+itamae_opts='-l debug'
+
+if [ $# -lt 2 ]; then
+  echo $0 '[hostname or `all`] [roles...]'
+  exit 1
+fi
+
+cond=""
+
+case "x$1" in
+	"xall" )
+		shift
+		echo "Execute recipes on all hosts"
+    ;;
+  * )
+    echo "Execute recipes on $1"
+		cond="if (\$1 == \"$1\") "
+    ;;
+esac
+
+awk '/^[^#]/ { '"$cond"' print "ssh -h", $2, "-j", $3, "'"$itamae_opts $*"'" }' $hosts |
+  tr '\n' '\0' |
+  # xargs -0 -n1 echo
+  xargs -o -0 -I{} sh -c "itamae {}"
