@@ -41,7 +41,7 @@ interfaces = {
 }
 
 interfaces.each do |interface, port|
-	execute "Create Identity service API Endpoint (#{interface})" do
+	execute "Create Compute service API Endpoint (#{interface})" do
 		command "#{env} openstack endpoint create --region #{node[:region_name]} compute #{interface} http://#{node[:controller_node_ip]}:#{port}/v2.1/%\\(tenant_id\\)s"
 		not_if "#{env} openstack endpoint list | grep nova | grep #{interface}"
 	end
