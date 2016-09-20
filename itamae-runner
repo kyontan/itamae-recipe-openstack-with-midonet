@@ -12,7 +12,7 @@ fi
 cond=""
 
 case "x$1" in
-	"xall" )
+  "xall" )
     echo "Execute recipes on all hosts"
     ;;
   * )
