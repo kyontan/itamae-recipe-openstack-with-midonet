@@ -1,4 +1,12 @@
-# OpenStack Mitaka + Midonet Instllation Provisioning Recipes (in Itamae)
+# OpenStack + Midonet Instllation Provisioning Recipes (in Itamae)
+
+# Description
+
+Itamae recipe for installing
+
+- Openstack Mitaka
+- Midonet 5.2
+- All required dependencies
 
 ## Requires
 
@@ -9,14 +17,22 @@
 
 ### First time
 
-1. Edit `hosts`
+1. Edit `hosts` (sample is located at `hosts.sample`)
+1. Edit `nodes_template/*.json` (sample is located at `nodes_template.sample` directory)
 1. Run `./node_json_generate`
+  - this generates `nodes/` to all required json files based on `nodes_template/*`
+
+you can use recipe group insted of each recipe
+
+`./itamae-runner all recipe-groups/[script].rb`
+
+also, you can run specified recie
 
 `./itamae-runner all recipes/[script].rb`
 
 if you want to provision specified host:
 
-`./itamae-runner [hostname] recipes/[script].rb`
+`./itamae-runner [hostname] [script].rb`
 
 ## Recipes (sorted for running order)
 
@@ -48,7 +64,7 @@ if you want to provision specified host:
 1. install-midonet-cli.rb
 1. install-midonet-midolman.rb
 
-### Controller node
+### Controller node (`recipe-groups/controller.rb`)
 
 1. update-hosts.rb
 1. setup-midonet-repositories.rb
@@ -75,7 +91,7 @@ if you want to provision specified host:
 1. install-midonet-cli.rb
 1. install-midonet-midolman.rb
 
-### Compute node
+### Compute node (`recipe-groups/compute.rb`)
 
 1. update-hosts.rb
 1. setup-midonet-repositories.rb

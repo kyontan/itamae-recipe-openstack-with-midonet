@@ -1,0 +1,8 @@
+{
+	"ip_address": "10.0.0.X",
+	"ntp_server": "10.0.0.2",
+	"midonet": {
+		"resource_template_name": "agent-compute-medium",
+		"midolman_jvm_resource_template": "midolman-env.sh.compute.medium"
+	}
+}

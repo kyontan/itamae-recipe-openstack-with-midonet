@@ -1,0 +1,19 @@
+{
+	"ip_address": "10.0.0.2",
+	"ntp_server": "ntp.nict.jp",
+	"db_root_password": "PASSWORD_OF_XXX",
+	"keystone_db_password": "PASSWORD_OF_XXX",
+	"keystone_admin_token": "PASSWORD_OF_XXX",
+	"glance_db_password": "PASSWORD_OF_XXX",
+	"glance_admin_password": "PASSWORD_OF_XXX",
+	"nova_db_password": "PASSWORD_OF_XXX",
+	"neutron_db_password": "PASSWORD_OF_XXX",
+	"cinder_db_password": "PASSWORD_OF_XXX",
+	"cinder_admin_password": "PASSWORD_OF_XXX",
+	"time_zone": "Asia/Tokyo",
+	"nsdb_node_id": 1,
+	"midonet": {
+		"resource_template_name": "agent-gateway-medium",
+		"midolman_jvm_resource_template": "midolman-env.sh.gateway.medium"
+	}
+}

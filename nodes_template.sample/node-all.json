@@ -1,0 +1,54 @@
+{
+	"controller_node_ip": "10.0.0.2",
+	"nsdb_ips": [
+		"10.0.0.2"
+	],
+	"ntp_server": null,
+	"management_network_ip": "10.0.0.0/24",
+	"gateway_ip": "10.0.0.254",
+	"region_name": "RegionOne",
+	"services": [
+		{ "name": "keystone", "type": "identity", "description": "Openstack Idenity" },
+		{ "name": "glance",   "type": "image",    "description": "Openstack Image" },
+		{ "name": "nova",     "type": "compute",  "description": "Openstack Compute" },
+		{ "name": "neutron",  "type": "network",  "description": "Openstack Networking" },
+		{ "name": "cinder",   "type": "volume",   "description": "Openstack Block Storage" },
+		{ "name": "cinderv2", "type": "volumev2", "description": "Openstack Block Storage" },
+		{ "name": "midonet",  "type": "midonet",  "description": "MidoNet API Service" }
+	],
+	"domains": [
+		{ "name": "default", "description": "Default Domain" }
+	],
+	"projects": [
+		{ "name": "admin",   "description": "Admin Project",   "domain": "default" },
+		{ "name": "service", "description": "Service Project", "domain": "default" },
+		{ "name": "demo",    "description": "Demo Project",    "domain": "default" }
+	],
+	"users": [
+		{ "name": "admin",   "password": "PASSWORD_OF_XXX", "domain": "default" },
+		{ "name": "glance",  "password": "PASSWORD_OF_XXX", "domain": "default" },
+		{ "name": "nova",    "password": "PASSWORD_OF_XXX", "domain": "default" },
+		{ "name": "neutron", "password": "PASSWORD_OF_XXX", "domain": "default" },
+		{ "name": "cinder",  "password": "PASSWORD_OF_XXX", "domain": "default" },
+		{ "name": "user",    "password": "user",            "domain": "default" },
+		{ "name": "midonet", "password": "midonet",         "domain": "default" }
+	],
+	"roles": [
+		{ "name": "admin", "project": "admin",   "user": "admin" },
+		{ "name": "user",  "project": "demo",    "user": "user" },
+		{ "name": "admin", "project": "service", "user": "glance" },
+		{ "name": "admin", "project": "service", "user": "nova" },
+		{ "name": "admin", "project": "service", "user": "neutron" },
+		{ "name": "admin", "project": "service", "user": "cinder" },
+		{ "name": "admin", "project": "service", "user": "midonet" }
+	],
+	"hosts": [
+		{ "name": "controller-node", "ip": "10.0.0.2"},
+		{ "name": "compute-node-1",  "ip": "10.0.0.X"},
+		{ "name": "compute-node-2",  "ip": "10.0.0.Y"}
+	],
+	"nova_admin_password": "PASSWORD_OF_XXX",
+	"rabbitmq_password": "PASSWORD_OF_XXX",
+	"neutron_admin_password": "PASSWORD_OF_XXX",
+	"neutron_metadata_proxy_shared_secret": "PASSWORD_OF_XXX"
+}

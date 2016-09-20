@@ -1,0 +1,5 @@
+# [hostname] [ssh host] [node json ...]
+controller 10.0.0.2 nodes/node-controller.json
+compute-1  ssh-host-X nodes/node-compute-1.json
+compute-2  ssh-host-Y nodes/node-compute-2.json
+
